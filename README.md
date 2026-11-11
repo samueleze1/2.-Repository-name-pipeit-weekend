@@ -1,1 +1,85 @@
-# PipeIt Weekend: my CI/CD pipeline ![pipeline](https://github.com/samueleze1/pipeit-weekend/actions/workflows/pipeline.yml/badge.svg) **Live site:** https://samueleze1.github.io/pipeit-weekend/ A CI/CD pipeline I built with GitHub Actions during PipeIt Weekend by SKILL.SCH. Every change I push is tested, a web page is built by **my own custom GitHub Action**, and the result is published to GitHub Pages automatically. It also rebuilds itself every morning on a schedule. ## How it works ``` push to main / daily schedule / Run workflow button | v test -> bash tests/check.sh (fails the pipeline if something is wrong) | v build -> my action: .github/actions/build-card (makes site/index.html) | v deploy -> GitHub Pages (the live site above) ``` ## What is in this repo | File | What it does | |------|--------------| | `.github/workflows/hello.yml` | My first workflow: prints a message on every push | | `.github/workflows/ci.yml` | Runs my test on every push and pull request | | `.github/workflows/pipeline.yml` | Test, build with my action, deploy to GitHub Pages | | `.github/actions/build-card/action.yml` | My custom action: builds the status page | | `tests/check.sh` | My test: checks this README has a title | ## My custom action `build-card` is a composite action. It takes two inputs, `name` (required) and `message` (optional), writes `site/index.html` with the run number, commit and time, and adds a summary to the run page. ```yaml - uses: ./.github/actions/build-card with: name: Your Name message: Built automatically by my own GitHub Action ``` ## What I learned - Workflows live in `.github/workflows` and run on triggers: push, pull_request, schedule and workflow_dispatch. - `needs:` makes jobs run in order, so a failing test stops a broken site going live. - How to write and reuse my own action with inputs and outputs. - How to read a red run's log and fix it. ## What I would add next - [ ] Run the checks on pull requests only and protect the main branch - [ ] Add a second test - [ ] Publish my action so other repos can use it ## About Built by YOUR NAME during [PipeIt Weekend](https://skill-sch.com/pipeit) by SKILL.SCH.
+# PipeIt Weekend: My CI/CD Pipeline
+
+[![CI/CD Pipeline](https://github.com/samueleze1/pipeit-weekend/actions/workflows/pipeline.yml/badge.svg)](https://github.com/samueleze1/pipeit-weekend/actions/workflows/pipeline.yml)
+
+**Live Site:** https://samueleze1.github.io/pipeit-weekend/
+
+## Project Overview
+
+This project demonstrates my understanding of Continuous Integration and Continuous Deployment (CI/CD) using GitHub Actions.
+
+I built this project during PipeIt Weekend by SKILL.SCH. The pipeline automatically runs tests, builds a status page using a custom GitHub Action, and deploys the generated website to GitHub Pages.
+
+It also includes a scheduled workflow that runs automatically every day.
+
+## CI/CD Pipeline Stages
+
+1. **Trigger:** The pipeline runs when code is pushed to the `main` branch, on a scheduled basis, or manually.
+2. **Test:** Runs automated checks using `bash tests/check.sh`.
+3. **Build:** Uses my custom composite GitHub Action in `.github/actions/build-card` to generate the website.
+4. **Deploy:** Publishes the generated website to GitHub Pages.
+
+## Repository Structure
+
+```text
+pipeit-weekend/
+├── .github/
+│   ├── workflows/
+│   │   ├── hello.yml
+│   │   ├── ci.yml
+│   │   └── pipeline.yml
+│   └── actions/
+│       └── build-card/
+│           └── action.yml
+├── tests/
+│   └── check.sh
+└── README.md
+```
+
+## Custom GitHub Action
+
+I created a reusable composite GitHub Action that accepts two inputs:
+
+- `name` – My name, used on the generated status page.
+- `message` – An optional custom message.
+
+The action generates `site/index.html` with information such as the workflow run number, commit details, timestamp, and GitHub Actions summary.
+
+### Example Usage
+
+```yaml
+- name: Build status page
+  uses: ./.github/actions/build-card
+  with:
+    name: Samuel Eze Anayo
+    message: Built automatically by my own GitHub Action
+```
+
+## What I Learned
+
+Through this project, I gained practical experience with:
+
+- GitHub Actions workflows and triggers.
+- Automating tests with CI pipelines.
+- Using job dependencies with `needs:`.
+- Creating reusable composite GitHub Actions.
+- Passing inputs and generating outputs.
+- Deploying websites with GitHub Pages.
+- Reading workflow logs and debugging pipeline failures.
+
+## Future Improvements
+
+- [ ] Add more automated tests.
+- [ ] Improve the generated status page.
+- [ ] Add notifications for failed pipeline runs.
+- [ ] Introduce additional deployment checks.
+
+## About
+
+**Created by Samuel Eze Anayo**
+
+- GitHub: https://github.com/samueleze1
+- Project: https://github.com/samueleze1/pipeit-weekend
+- Live Site: https://samueleze1.github.io/pipeit-weekend/
+
+Built as part of PipeIt Weekend by SKILL.SCH.
